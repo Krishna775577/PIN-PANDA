@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pin • Pin Panda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-left flex items-center gap-16">
+      <a href="index.html" class="logo" aria-label="Pin Panda">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.372-12 12 0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+        Pin Panda
+      </a>
+    </div>
+    <nav class="header-right flex items-center gap-4" id="authSection"></nav>
+  </header>
+
+  <main class="main" style="max-width:800px;">
+    <div id="pinDetail" style="display:none;">
+      <!-- Rendered by JS -->
+    </div>
+    <div id="pinLoading" class="flex justify-center py-16"><div class="btn loading" style="width:40px;height:40px;border-color:var(--red) transparent var(--red) transparent;"></div></div>
+    <div id="pinError" class="text-center py-16" style="display:none;">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--muted);margin-bottom:16px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <h3 style="font-size:18px;font-weight:600;margin-bottom:8px;">Pin not found</h3>
+      <p style="color:var(--muted);"><a href="index.html" style="color:var(--red);">Back to home</a></p>
+    </div>
+
+    <!-- Related pins -->
+    <section id="relatedSection" style="display:none;margin-top:48px;">
+      <h2 style="font-size:20px;font-weight:700;margin-bottom:16px;">More like this</h2>
+      <div class="grid" id="relatedGrid"></div>
+    </section>
+  </main>
+
+  <script type="module" src="assets/js/firebase-config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script type="module">
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { auth } from './assets/js/firebase-config.js';
+
+    onAuthStateChanged(auth, (user) => {
+      if (user && !Auth.isLoggedIn()) {
+        user.getIdToken().then(idToken => {
+          Auth.setSession({
+            id: user.uid,
+            name: user.displayName || user.email.split('@')[0],
+            email: user.email,
+            username: (user.displayName || user.email.split('@')[0]).toLowerCase().replace(/\s+/g, ''),
+            avatar: user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.uid}`,
+            bio: '', followers: 0, following: [], pins: 0, boards: 0,
+            createdAt: new Date().toISOString(),
+            settings: { emailNotifications: true, pushNotifications: true, privateProfile: false },
+            firebaseToken: idToken
+          }, true);
+        });
+      }
+    });
+  </script>
+  <script>
+    App.pinInit = async function() {
+      const params = new URLSearchParams(window.location.search);
+      const pinId = params.get('id');
+      if (!pinId) {
+        document.getElementById('pinLoading').style.display = 'none';
+        document.getElementById('pinError').style.display = 'block';
+        return;
+      }
+
+      try {
+        const pin = await API.getPin(pinId);
+        const savedPins = JSON.parse(localStorage.getItem('saved_pins') || '[]');
+        pin.saved = savedPins.includes(pin.id);
+
+        this.renderPinDetail(pin);
+        await this.loadRelatedPins(pin);
+      } catch (err) {
+        document.getElementById('pinLoading').style.display = 'none';
+        document.getElementById('pinError').style.display = 'block';
+      }
+    };
+
+    App.renderPinDetail = function(pin) {
+      const user = pin.user || {};
+      const board = pin.board || {};
+      const gradient = pin.gradient || `linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%)`;
+      const imgHtml = pin.image
+        ? `<img src="${pin.image}" alt="${pin.title}" style="width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:var(--radius);">`
+        : `<div style="width:100%;aspect-ratio:2/3;background:${gradient};border-radius:var(--radius);"></div>`;
+
+      document.getElementById('pinLoading').style.display = 'none';
+      document.getElementById('pinDetail').style.display = '';
+
+      document.getElementById('pinDetail').innerHTML = `
+        <article style="display:grid;gap:24px;">
+          <div>
+            ${imgHtml}
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <a href="profile.html?user=${user.username}" class="avatar avatar-lg">
+                  ${user.avatar ? `<img src="${user.avatar}" alt="${user.name}" loading="lazy">` : `<div class="avatar-text">${user.name?.charAt(0) || '?'}</div>`}
+                </a>
+                <div>
+                  <a href="profile.html?user=${user.username}" style="font-weight:600;font-size:16px;">${user.name}</a>
+                  <div style="font-size:13px;color:var(--muted);">@${user.username} · ${App.formatDate(pin.createdAt)}</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button class="btn-follow ${user.id === App.state.user?.id ? 'following' : ''}" data-user-id="${user.id}" style="padding:8px 20px;font-size:14px;">${user.id === App.state.user?.id ? 'You' : 'Follow'}</button>
+                <button class="btn-icon" aria-label="More"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
+              </div>
+            </div>
+
+            <h1 style="font-size:24px;font-weight:700;line-height:1.3;">${pin.title}</h1>
+            ${pin.description ? `<p style="font-size:15px;line-height:1.6;color:var(--fg);">${pin.description}</p>` : ''}
+
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+              ${pin.tags?.map(tag => `<span style="background:var(--border);padding:4px 12px;border-radius:var(--radius-pill);font-size:13px;">#${tag}</span>`).join('') || ''}
+            </div>
+
+            <div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+              <button class="btn-save ${pin.saved ? 'saved' : ''}" data-pin-id="${pin.id}" style="width:44px;height:44px;" aria-label="${pin.saved ? 'Unsave' : 'Save'}">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="${pin.saved ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 1 0 7.78l-8 8a5.5 5.5 0 0 1-7.78 0l-8-8a5.5 5.5 0 0 1 0-7.78l8-8a5.5 5.5 0 0 1 7.78 0z"/>
+                  ${!pin.saved ? '<path d="M12 18l4-4"/>' : ''}
+                </svg>
+              </button>
+              <span style="font-size:14px;color:var(--muted);">${App.formatNumber(pin.saves)} saves</span>
+              <span style="font-size:14px;color:var(--muted);">${App.formatNumber(pin.comments)} comments</span>
+              <div style="flex:1;"></div>
+              <button class="btn-icon" aria-label="Send"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+              <button class="btn-icon" aria-label="Download"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+            </div>
+
+            <a href="board.html?id=${board.id}" style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--border);border-radius:var(--radius);text-decoration:none;color:inherit;transition:background var(--transition);" onmouseover="this.style.background='var(--muted)'" onmouseout="this.style.background='var(--border)'">
+              <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--bg);overflow:hidden;">
+                ${board.cover ? `<img src="${board.cover}" alt="" style="width:100%;height:100%;object-fit:cover;">` : ''}
+              </div>
+              <div>
+                <div style="font-weight:600;font-size:14px;">${board.title}</div>
+                <div style="font-size:12px;color:var(--muted);">${board.pins} pins</div>
+              </div>
+            </a>
+          </div>
+        </article>
+      `;
+
+      // Bind save button
+      const saveBtn = document.querySelector('[data-pin-id]');
+      if (saveBtn) {
+        saveBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.toggleSave(pin.id, saveBtn);
+        });
+      }
+    };
+
+    App.loadRelatedPins = async function(pin) {
+      try {
+        const allPins = await API.getPins(100);
+        const related = allPins
+          .filter(p => p.id !== pin.id && (p.boardId === pin.boardId || (pin.tags && p.tags && p.tags.some(t => pin.tags.includes(t)))))
+          .slice(0, 12);
+        if (related.length > 0) {
+          const savedPins = JSON.parse(localStorage.getItem('saved_pins') || '[]');
+          related.forEach(p => p.saved = savedPins.includes(p.id));
+          document.getElementById('relatedSection').style.display = '';
+          this.renderPins(related, document.getElementById('relatedGrid'));
+        }
+      } catch (err) {
+        console.error('Failed to load related pins', err);
+      }
+    };
+  </script>
+</body>
+</html>
