@@ -63,7 +63,7 @@
   <script src="assets/js/app.js"></script>
   <script type="module">
     import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-    import { firebaseAuth } from './assets/js/firebase-config.js';
+    import { auth } from './assets/js/firebase-config.js';
 
     // Redirect if already logged in (check both Firebase and local session)
     const checkAuth = async () => {
@@ -73,7 +73,7 @@
         return;
       }
       // Check Firebase auth state
-      onAuthStateChanged(firebaseAuth, (user) => {
+      onAuthStateChanged(auth, (user) => {
         if (user) {
           // User is signed in with Firebase, create local session
           handleFirebaseUser(user);

@@ -44,10 +44,10 @@
   <script src="assets/js/app.js"></script>
   <script type="module">
     import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-    import { firebaseAuth } from './assets/js/firebase-config.js';
+    import { auth } from './assets/js/firebase-config.js';
 
     // Wait for Firebase auth to initialize, then start app
-    onAuthStateChanged(firebaseAuth, async (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
         // Firebase user signed in, create local session
         try {
