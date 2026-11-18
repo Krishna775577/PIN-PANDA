@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Pin • Pin Panda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-left flex items-center gap-16">
+      <a href="index.html" class="logo" aria-label="Pin Panda">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.372-12 12 0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.401.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+        Pin Panda
+      </a>
+    </div>
+    <nav class="header-right flex items-center gap-4" id="authSection"></nav>
+  </header>
+
+  <main class="main" style="max-width:700px;">
+    <div style="margin-bottom:32px;">
+      <h1 style="font-size:28px;font-weight:700;margin-bottom:8px;">Create a pin</h1>
+      <p style="color:var(--muted);">Upload an image, add details, and share your idea</p>
+    </div>
+
+    <div class="create-steps" role="tablist" aria-label="Create pin steps">
+      <div class="create-step active" role="tab" aria-selected="true" data-step="1">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg>
+        <span>Image</span>
+      </div>
+      <div class="create-step" role="tab" aria-selected="false" data-step="2">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span>Details</span>
+      </div>
+      <div class="create-step" role="tab" aria-selected="false" data-step="3">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+        <span>Board</span>
+      </div>
+    </div>
+
+    <form id="createPinForm" novalidate>
+      <!-- Step 1: Image -->
+      <div class="create-panel" data-step="1" style="display:block;">
+        <div class="upload-area" id="uploadArea" tabindex="0" role="button" aria-label="Upload image">
+          <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <p class="upload-text">Drag & drop an image or <strong>click to browse</strong></p>
+          <p style="font-size:12px;color:var(--muted);margin-top:8px;">PNG, JPG, WEBP up to 20MB</p>
+          <input type="file" id="imageInput" accept="image/*" style="display:none;">
+        </div>
+        <div class="image-preview" id="imagePreview" style="display:none;"></div>
+      </div>
+
+      <!-- Step 2: Details -->
+      <div class="create-panel" data-step="2" style="display:none;">
+        <div class="form-group">
+          <label class="form-label" for="pinTitle">Title *</label>
+          <input type="text" class="form-input" id="pinTitle" name="title" placeholder="Add a title" required maxlength="100">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="pinDescription">Description</label>
+          <textarea class="form-input" id="pinDescription" name="description" rows="4" placeholder="Tell people what this pin is about" maxlength="500"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tags</label>
+          <div class="tag-input" id="tagInput" role="textbox" aria-label="Add tags" tabindex="0">
+            <input type="text" id="tagField" placeholder="Add a tag" style="flex:1;border:none;background:transparent;outline:none;font-size:13px;padding:4px 0;" maxlength="30">
+          </div>
+          <p style="font-size:12px;color:var(--muted);margin-top:4px;">Press Enter to add tags (max 10)</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="pinLink">Destination link (optional)</label>
+          <input type="url" class="form-input" id="pinLink" name="link" placeholder="https://example.com" maxlength="200">
+        </div>
+      </div>
+
+      <!-- Step 3: Board -->
+      <div class="create-panel" data-step="3" style="display:none;">
+        <div class="form-group">
+          <label class="form-label" for="boardSelect">Select board *</label>
+          <select class="board-select" id="boardSelect" name="boardId" required>
+            <option value="">Choose a board</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Or create a new board</label>
+          <button type="button" class="btn-secondary w-full" id="newBoardBtn" style="justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Create board</button>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div style="display:flex;justify-content:space-between;margin-top:32px;padding-top:24px;border-top:1px solid var(--border);">
+        <button type="button" class="btn-secondary" id="prevBtn" style="display:none;">Back</button>
+        <div style="display:flex;gap:12px;">
+          <button type="button" class="btn-secondary" id="nextBtn">Next</button>
+          <button type="submit" class="btn-primary" id="publishBtn" style="display:none;">Publish</button>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <script type="module" src="assets/js/firebase-config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script type="module">
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { auth } from './assets/js/firebase-config.js';
+
+    onAuthStateChanged(auth, (user) => {
+      if (user && !Auth.isLoggedIn()) {
+        user.getIdToken().then(idToken => {
+          Auth.setSession({
+            id: user.uid,
+            name: user.displayName || user.email.split('@')[0],
+            email: user.email,
+            username: (user.displayName || user.email.split('@')[0]).toLowerCase().replace(/\s+/g, ''),
+            avatar: user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.uid}`,
+            bio: '', followers: 0, following: [], pins: 0, boards: 0,
+            createdAt: new Date().toISOString(),
+            settings: { emailNotifications: true, pushNotifications: true, privateProfile: false },
+            firebaseToken: idToken
+          }, true);
+        });
+      }
+    });
+  </script>
+  <script>
+    App.createInit = async function() {
+      this.state.createStep = 1;
+      this.state.createData = { image: null, tags: [] };
+
+      // Load boards
+      await this.loadBoardsForSelect();
+
+      // Bind events
+      this.bindCreateEvents();
+    };
+
+    App.loadBoardsForSelect = async function() {
+      try {
+        const boards = await API.getBoards();
+        const select = document.getElementById('boardSelect');
+        boards.forEach(board => {
+          const opt = document.createElement('option');
+          opt.value = board.id;
+          opt.textContent = board.title + (board.secret ? ' 🔒' : '');
+          select.appendChild(opt);
+        });
+      } catch (err) {
+        console.error('Failed to load boards', err);
+      }
+    };
+
+    App.bindCreateEvents = function() {
+      // Image upload
+      const uploadArea = document.getElementById('uploadArea');
+      const imageInput = document.getElementById('imageInput');
+      const imagePreview = document.getElementById('imagePreview');
+
+      uploadArea.addEventListener('click', () => imageInput.click());
+      uploadArea.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') imageInput.click(); });
+
+      uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('drag-over');
+      });
+      uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+      uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+        if (e.dataTransfer.files[0]) this.handleImageFile(e.dataTransfer.files[0]);
+      });
+
+      imageInput.addEventListener('change', (e) => {
+        if (e.target.files[0]) this.handleImageFile(e.target.files[0]);
+      });
+
+      // Tags
+      const tagField = document.getElementById('tagField');
+      const tagInput = document.getElementById('tagInput');
+      tagField.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && tagField.value.trim()) {
+          e.preventDefault();
+          this.addTag(tagField.value.trim());
+          tagField.value = '';
+        }
+        if (e.key === 'Backspace' && !tagField.value && this.state.createData.tags.length > 0) {
+          this.removeTag(this.state.createData.tags.length - 1);
+        }
+      });
+
+      // Navigation
+      document.getElementById('nextBtn').addEventListener('click', () => this.nextStep());
+      document.getElementById('prevBtn').addEventListener('click', () => this.prevStep());
+      document.getElementById('publishBtn').addEventListener('click', (e) => { e.preventDefault(); this.publishPin(); });
+
+      // New board
+      document.getElementById('newBoardBtn').addEventListener('click', () => this.openCreateBoardModal(() => this.loadBoardsForSelect()));
+    };
+
+    App.handleImageFile = function(file) {
+      if (!file.type.startsWith('image/')) {
+        this.showToast('Please select an image file', 'error');
+        return;
+      }
+      if (file.size > 20 * 1024 * 1024) {
+        this.showToast('File too large (max 20MB)', 'error');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.state.createData.image = e.target.result;
+        document.getElementById('uploadArea').style.display = 'none';
+        const preview = document.getElementById('imagePreview');
+        preview.style.display = 'block';
+        preview.innerHTML = `<img src="${e.target.result}" alt="Preview"><button class="remove-image" aria-label="Remove image"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+        preview.querySelector('.remove-image').addEventListener('click', () => this.removeImage());
+      };
+      reader.readAsDataURL(file);
+    };
+
+    App.removeImage = function() {
+      this.state.createData.image = null;
+      document.getElementById('uploadArea').style.display = '';
+      document.getElementById('imagePreview').style.display = 'none';
+      document.getElementById('imageInput').value = '';
+    };
+
+    App.addTag = function(tag) {
+      if (this.state.createData.tags.includes(tag)) return;
+      if (this.state.createData.tags.length >= 10) {
+        this.showToast('Maximum 10 tags', 'error');
+        return;
+      }
+      this.state.createData.tags.push(tag);
+      this.renderTags();
+    };
+
+    App.removeTag = function(index) {
+      this.state.createData.tags.splice(index, 1);
+      this.renderTags();
+    };
+
+    App.renderTags = function() {
+      const container = document.getElementById('tagInput');
+      const tags = this.state.createData.tags.map((tag, i) => `
+        <span class="tag">${tag}<button type="button" data-index="${i}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></span>
+      `).join('');
+      container.innerHTML = tags + `<input type="text" id="tagField" placeholder="Add a tag" style="flex:1;border:none;background:transparent;outline:none;font-size:13px;padding:4px 0;" maxlength="30">`;
+      // Re-bind
+      document.getElementById('tagField').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.target.value.trim()) {
+          e.preventDefault();
+          this.addTag(e.target.value.trim());
+          e.target.value = '';
+        }
+        if (e.key === 'Backspace' && !e.target.value && this.state.createData.tags.length > 0) {
+          this.removeTag(this.state.createData.tags.length - 1);
+        }
+      });
+      container.querySelectorAll('.tag button').forEach(btn => {
+        btn.addEventListener('click', () => this.removeTag(parseInt(btn.dataset.index)));
+      });
+    };
+
+    App.nextStep = function() {
+      if (this.state.createStep === 1) {
+        if (!this.state.createData.image) {
+          this.showToast('Please add an image', 'error');
+          return;
+        }
+      } else if (this.state.createStep === 2) {
+        if (!document.getElementById('pinTitle').value.trim()) {
+          this.showToast('Please add a title', 'error');
+          return;
+        }
+        this.state.createData.title = document.getElementById('pinTitle').value.trim();
+        this.state.createData.description = document.getElementById('pinDescription').value.trim();
+        this.state.createData.link = document.getElementById('pinLink').value.trim();
+      }
+      this.goToStep(this.state.createStep + 1);
+    };
+
+    App.prevStep = function() {
+      this.goToStep(this.state.createStep - 1);
+    };
+
+    App.goToStep = function(step) {
+      this.state.createStep = step;
+      document.querySelectorAll('.create-step').forEach((el, i) => {
+        if (i + 1 < step) el.classList.add('completed');
+        else el.classList.remove('completed');
+        el.classList.toggle('active', i + 1 === step);
+        el.setAttribute('aria-selected', i + 1 === step);
+      });
+      document.querySelectorAll('.create-panel').forEach(el => {
+        el.style.display = parseInt(el.dataset.step) === step ? 'block' : 'none';
+      });
+      document.getElementById('prevBtn').style.display = step > 1 ? '' : 'none';
+      document.getElementById('nextBtn').style.display = step < 3 ? '' : 'none';
+      document.getElementById('publishBtn').style.display = step === 3 ? '' : 'none';
+    };
+
+    App.publishPin = async function() {
+      const boardId = document.getElementById('boardSelect').value;
+      if (!boardId) {
+        this.showToast('Please select a board', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('publishBtn');
+      btn.classList.add('loading');
+      btn.disabled = true;
+
+      try {
+        const pin = await API.createPin({
+          title: this.state.createData.title,
+          description: this.state.createData.description,
+          image: this.state.createData.image,
+          link: this.state.createData.link,
+          tags: this.state.createData.tags,
+          boardId
+        });
+        this.showToast('Pin published!');
+        setTimeout(() => window.location.href = `pin.html?id=${pin.id}`, 1000);
+      } catch (err) {
+        this.showToast('Failed to publish', 'error');
+      } finally {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pin Panda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-left flex items-center gap-16">
+      <a href="index.html" class="logo" aria-label="Pin Panda">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.372-12 12 0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.401.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+        Pin Panda
+      </a>
+      <div class="search-wrap flex-1" style="max-width:640px;position:relative;">
+        <input type="search" class="search-input" placeholder="Search ideas" aria-label="Search">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+    </div>
+    <nav class="header-right flex items-center gap-4" id="authSection">
+      <!-- Rendered by App.renderHeader() -->
+    </nav>
+  </header>
+
+  <main class="main">
+    <div class="grid" id="pinGrid"></div>
+    <div id="loadingIndicator" class="flex justify-center py-16" style="display:none;">
+      <div class="btn loading" style="width:40px;height:40px;border-color:var(--red) transparent var(--red) transparent;"></div>
+    </div>
+    <div id="emptyState" class="text-center py-16" style="display:none;">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--muted);margin-bottom:16px;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <h3 style="font-size:18px;font-weight:600;margin-bottom:8px;">No pins found</h3>
+      <p style="color:var(--muted);">Try a different search or <a href="create.html" style="color:var(--red);">create your first pin</a></p>
+    </div>
+  </main>
+
+  <script type="module" src="assets/js/firebase-config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script type="module">
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { firebaseAuth } from './assets/js/firebase-config.js';
+
+    // Wait for Firebase auth to initialize, then start app
+    onAuthStateChanged(firebaseAuth, async (user) => {
+      if (user) {
+        // Firebase user signed in, create local session
+        try {
+          const idToken = await user.getIdToken();
+          const userData = {
+            id: user.uid,
+            name: user.displayName || user.email.split('@')[0],
+            email: user.email,
+            username: (user.displayName || user.email.split('@')[0]).toLowerCase().replace(/\s+/g, ''),
+            avatar: user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.uid}`,
+            bio: '',
+            followers: 0,
+            following: [],
+            pins: 0,
+            boards: 0,
+            createdAt: new Date().toISOString(),
+            settings: { emailNotifications: true, pushNotifications: true, privateProfile: false },
+            firebaseToken: idToken
+          };
+          Auth.setSession(userData, true);
+        } catch (err) {
+          console.error('Auth sync error:', err);
+        }
+      }
+      // Initialize app after auth check
+      App.init();
+    });
+  </script>
+  <script>
+    // Home page specific logic
+    App.indexInit = async function() {
+      const grid = document.getElementById('pinGrid');
+      const loading = document.getElementById('loadingIndicator');
+      const empty = document.getElementById('emptyState');
+
+      this.state.pins = [];
+      this.state.pinOffset = 0;
+      this.state.hasMore = true;
+
+      await this.loadPins();
+
+      // Bind search
+      const searchInput = document.querySelector('.search-input');
+      if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && e.target.value.trim()) {
+            window.location.href = `search.html?q=${encodeURIComponent(e.target.value.trim())}`;
+          }
+        });
+      }
+    };
+
+    App.loadPins = async function() {
+      if (this.state.loading || !this.state.hasMore) return;
+      this.state.loading = true;
+      document.getElementById('loadingIndicator').style.display = 'flex';
+
+      try {
+        const pins = await API.getPins(20, this.state.pinOffset);
+        if (pins.length === 0) {
+          this.state.hasMore = false;
+          if (this.state.pins.length === 0) {
+            document.getElementById('emptyState').style.display = 'block';
+          }
+        } else {
+          // Mark saves for current user
+          const savedPins = JSON.parse(localStorage.getItem('saved_pins') || '[]');
+          pins.forEach(p => p.saved = savedPins.includes(p.id));
+
+          this.state.pins.push(...pins);
+          this.state.pinOffset += pins.length;
+          this.renderPins(pins, document.getElementById('pinGrid'), true);
+
+          if (pins.length < 20) this.state.hasMore = false;
+        }
+      } catch (err) {
+        this.showToast('Failed to load pins', 'error');
+      } finally {
+        this.state.loading = false;
+        document.getElementById('loadingIndicator').style.display = 'none';
+      }
+    };
+
+    App.loadMorePins = function() {
+      this.loadPins();
+    };
+  </script>
+</body>
+</html>

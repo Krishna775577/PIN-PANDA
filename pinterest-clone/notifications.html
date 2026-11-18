@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications • Pin Panda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-left flex items-center gap-16">
+      <a href="index.html" class="logo" aria-label="Pin Panda">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.372-12 12 0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.401.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+        Pin Panda
+      </a>
+    </div>
+    <nav class="header-right flex items-center gap-4" id="authSection"></nav>
+  </header>
+
+  <main class="main" style="max-width:600px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+      <h1 style="font-size:28px;font-weight:700;">Notifications</h1>
+      <button class="btn-ghost" id="markAllReadBtn">Mark all read</button>
+    </div>
+
+    <div class="tabs" id="notifTabs" role="tablist">
+      <button class="tab active" role="tab" aria-selected="true" data-filter="all">All</button>
+      <button class="tab" role="tab" aria-selected="false" data-filter="unread">Unread</button>
+    </div>
+
+    <div id="notificationsList"></div>
+    <div id="emptyState" class="text-center py-16" style="display:none;">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--muted);margin-bottom:16px;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <h3 style="font-size:18px;font-weight:600;margin-bottom:8px;">No notifications</h3>
+      <p style="color:var(--muted);">When you get notifications, they'll appear here</p>
+    </div>
+  </main>
+
+  <script type="module" src="assets/js/firebase-config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script type="module">
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { auth } from './assets/js/firebase-config.js';
+
+    onAuthStateChanged(auth, (user) => {
+      if (user && !Auth.isLoggedIn()) {
+        user.getIdToken().then(idToken => {
+          Auth.setSession({
+            id: user.uid,
+            name: user.displayName || user.email.split('@')[0],
+            email: user.email,
+            username: (user.displayName || user.email.split('@')[0]).toLowerCase().replace(/\s+/g, ''),
+            avatar: user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.uid}`,
+            bio: '', followers: 0, following: [], pins: 0, boards: 0,
+            createdAt: new Date().toISOString(),
+            settings: { emailNotifications: true, pushNotifications: true, privateProfile: false },
+            firebaseToken: idToken
+          }, true);
+        });
+      }
+    });
+  </script>
+  <script>
+    App.notificationsInit = async function() {
+      this.state.notifFilter = 'all';
+      await this.loadNotifications();
+
+      // Tabs
+      document.querySelectorAll('#notifTabs .tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('#notifTabs .tab').forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+          this.state.notifFilter = tab.dataset.filter;
+          this.renderNotifications();
+        });
+      });
+
+      document.getElementById('markAllReadBtn').addEventListener('click', () => this.markAllRead());
+    };
+
+    App.loadNotifications = async function() {
+      try {
+        this.state.notifications = await API.getNotifications();
+        this.renderNotifications();
+      } catch (err) {
+        this.showToast('Failed to load notifications', 'error');
+      }
+    };
+
+    App.renderNotifications = function() {
+      const list = document.getElementById('notificationsList');
+      const empty = document.getElementById('emptyState');
+
+      let notifications = this.state.notifications;
+      if (this.state.notifFilter === 'unread') {
+        notifications = notifications.filter(n => !n.read);
+      }
+
+      if (notifications.length === 0) {
+        list.style.display = 'none';
+        empty.style.display = 'block';
+        empty.querySelector('h3').textContent = this.state.notifFilter === 'unread' ? 'No unread notifications' : 'No notifications';
+        empty.querySelector('p').textContent = this.state.notifFilter === 'unread' ? 'You\'re all caught up!' : 'When you get notifications, they\'ll appear here';
+        return;
+      }
+
+      empty.style.display = 'none';
+      list.style.display = 'block';
+      list.innerHTML = notifications.map(n => `
+        <div class="notification ${!n.read ? 'unread' : ''}" data-id="${n.id}">
+          <a href="profile.html?user=${n.actor?.username || ''}" class="avatar notification-avatar">
+            ${n.actor?.avatar ? `<img src="${n.actor.avatar}" alt="${n.actor.name}" loading="lazy">` : `<div class="avatar-text">${n.actor?.name?.charAt(0) || '?'}</div>`}
+          </a>
+          <div class="notification-content">
+            <p class="notification-text">${n.message}</p>
+            <div class="notification-time">${App.formatDate(n.createdAt)}</div>
+          </div>
+          ${!n.read ? '<button class="btn-icon" aria-label="Mark read" style="width:32px;height:32px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></button>' : ''}
+        </div>
+      `).join('');
+
+      // Bind mark read
+      list.querySelectorAll('.notification .btn-icon').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const notification = btn.closest('.notification');
+          this.markNotificationRead(notification.dataset.id);
+        });
+      });
+
+      // Click notification -> navigate
+      list.querySelectorAll('.notification').forEach(el => {
+        el.addEventListener('click', () => {
+          const n = this.state.notifications.find(x => x.id === el.dataset.id);
+          if (n.pinId) window.location.href = `pin.html?id=${n.pinId}`;
+          else if (n.actor?.username) window.location.href = `profile.html?user=${n.actor.username}`;
+        });
+      });
+    };
+
+    App.markNotificationRead = async function(id) {
+      try {
+        await API.markNotificationRead(id);
+        const n = this.state.notifications.find(x => x.id === id);
+        if (n) n.read = true;
+        this.renderNotifications();
+      } catch (err) {
+        this.showToast('Failed to update', 'error');
+      }
+    };
+
+    App.markAllRead = async function() {
+      try {
+        for (const n of this.state.notifications) {
+          if (!n.read) await API.markNotificationRead(n.id);
+          n.read = true;
+        }
+        this.renderNotifications();
+        this.showToast('All marked as read');
+      } catch (err) {
+        this.showToast('Failed to update', 'error');
+      }
+    };
+  </script>
+</body>
+</html>

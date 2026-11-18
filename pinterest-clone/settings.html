@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings • Pin Panda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-left flex items-center gap-16">
+      <a href="index.html" class="logo" aria-label="Pin Panda">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.372-12 12 0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.401.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+        Pin Panda
+      </a>
+    </div>
+    <nav class="header-right flex items-center gap-4" id="authSection"></nav>
+  </header>
+
+  <main class="main" style="display:flex;gap:48px;">
+    <nav class="settings-nav" id="settingsNav" aria-label="Settings navigation">
+      <div class="settings-section">
+        <div class="settings-section-title">Account</div>
+        <a href="#" class="settings-link active" data-panel="profile"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+        <a href="#" class="settings-link" data-panel="notifications"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notifications</a>
+        <a href="#" class="settings-link" data-panel="privacy"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Privacy & data</a>
+        <a href="#" class="settings-link" data-panel="security"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Security</a>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title">Preferences</div>
+        <a href="#" class="settings-link" data-panel="home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home feed</a>
+        <a href="#" class="settings-link" data-panel="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Search</a>
+        <a href="#" class="settings-link" data-panel="accessibility"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>Accessibility</a>
+      </div>
+    </nav>
+
+    <div class="settings-content">
+      <!-- Profile Panel -->
+      <div class="settings-panel active" id="panel-profile" role="tabpanel">
+        <h2 class="settings-group-title">Profile</h2>
+        <form id="profileForm">
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Display name</div>
+              <div class="setting-desc">Your public name on Pin Panda</div>
+            </div>
+            <input type="text" class="form-input" name="name" style="width:280px;" value="" id="profileName">
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Username</div>
+              <div class="setting-desc">Your unique @handle</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="color:var(--muted);">@</span>
+              <input type="text" class="form-input" name="username" style="width:200px;" value="" id="profileUsername">
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Bio</div>
+              <div class="setting-desc">Tell people about yourself (160 chars)</div>
+            </div>
+            <textarea class="form-input" name="bio" rows="3" style="width:280px;" id="profileBio"></textarea>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Email</div>
+              <div class="setting-desc">Your login email</div>
+            </div>
+            <input type="email" class="form-input" name="email" style="width:280px;" value="" id="profileEmail" disabled>
+          </div>
+          <button type="submit" class="btn-primary">Save changes</button>
+        </form>
+      </div>
+
+      <!-- Notifications Panel -->
+      <div class="settings-panel" id="panel-notifications" role="tabpanel">
+        <h2 class="settings-group-title">Email notifications</h2>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Activity about my pins</div>
+            <div class="setting-desc">When someone saves, comments, or tries your pins</div>
+          </div>
+          <div class="toggle" data-setting="emailPins" role="switch" aria-checked="true" tabindex="0"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">New followers</div>
+            <div class="setting-desc">When someone follows you</div>
+          </div>
+          <div class="toggle active" data-setting="emailFollowers" role="switch" aria-checked="true" tabindex="0"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Board updates</div>
+            <div class="setting-desc">When someone you follow creates a board</div>
+          </div>
+          <div class="toggle" data-setting="emailBoards" role="switch" aria-checked="false" tabindex="0"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Weekly inspiration</div>
+            <div class="setting-desc">Curated picks sent every week</div>
+          </div>
+          <div class="toggle active" data-setting="emailWeekly" role="switch" aria-checked="true" tabindex="0"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Product updates</div>
+            <div class="setting-desc">News about new Pin Panda features</div>
+          </div>
+          <div class="toggle" data-setting="emailProduct" role="switch" aria-checked="false" tabindex="0"></div>
+        </div>
+
+        <h2 class="settings-group-title">Push notifications</h2>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">All push notifications</div>
+            <div class="setting-desc">Enable to receive any push notifications</div>
+          </div>
+          <div class="toggle active" data-setting="pushEnabled" role="switch" aria-checked="true" tabindex="0"></div>
+        </div>
+      </div>
+
+      <!-- Privacy Panel -->
+      <div class="settings-panel" id="panel-privacy" role="tabpanel">
+        <h2 class="settings-group-title">Profile visibility</h2>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Private profile</div>
+            <div class="setting-desc">Only approved followers can see your boards and pins</div>
+          </div>
+          <div class="toggle" data-setting="privateProfile" role="switch" aria-checked="false" tabindex="0"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Search visibility</div>
+            <div class="setting-desc">Allow your profile to appear in search results</div>
+          </div>
+          <div class="toggle active" data-setting="searchVisibility" role="switch" aria-checked="true" tabindex="0"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Personalization</div>
+            <div class="setting-desc">Use your activity to personalize your experience</div>
+          </div>
+          <div class="toggle active" data-setting="personalization" role="switch" aria-checked="true" tabindex="0"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Analytics</div>
+            <div class="setting-desc">Help improve Pin Panda by sharing usage data</div>
+          </div>
+          <div class="toggle active" data-setting="analytics" role="switch" aria-checked="true" tabindex="0"></div>
+        </div>
+      </div>
+
+      <!-- Security Panel -->
+      <div class="settings-panel" id="panel-security" role="tabpanel">
+        <h2 class="settings-group-title">Password</h2>
+        <form id="passwordForm">
+          <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:12px;padding:0 0 16px;">
+            <div class="setting-info">
+              <div class="setting-label">Current password</div>
+            </div>
+            <input type="password" class="form-input" name="currentPassword" placeholder="Current password" style="width:280px;">
+          </div>
+          <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:12px;padding:0 0 16px;">
+            <div class="setting-info">
+              <div class="setting-label">New password</div>
+            </div>
+            <input type="password" class="form-input" name="newPassword" placeholder="New password (min 6 chars)" style="width:280px;">
+          </div>
+          <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:12px;padding:0 0 16px;">
+            <div class="setting-info">
+              <div class="setting-label">Confirm new password</div>
+            </div>
+            <input type="password" class="form-input" name="confirmPassword" placeholder="Confirm password" style="width:280px;">
+          </div>
+          <button type="submit" class="btn-primary">Update password</button>
+        </form>
+
+        <h2 class="settings-group-title">Two-factor authentication</h2>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">2FA via authenticator app</div>
+            <div class="setting-desc">Add an extra layer of security</div>
+          </div>
+          <button class="btn-secondary">Set up 2FA</button>
+        </div>
+
+        <h2 class="settings-group-title">Active sessions</h2>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">This device</div>
+            <div class="setting-desc">Chrome on Windows • Active now</div>
+          </div>
+          <button class="btn-ghost" style="padding:4px 12px;font-size:12px;">Revoke</button>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">iPhone</div>
+            <div class="setting-desc">Safari on iOS • 2 hours ago</div>
+          </div>
+          <button class="btn-ghost" style="padding:4px 12px;font-size:12px;">Revoke</button>
+        </div>
+        <button class="btn-secondary" style="margin-top:16px;">Log out of all sessions</button>
+      </div>
+
+      <!-- Home Feed Panel -->
+      <div class="settings-panel" id="panel-home" role="tabpanel">
+        <h2 class="settings-group-title">Home feed</h2>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Show pins from followed boards</div>
+            <div class="setting-desc">Prioritize content from boards you follow</div>
+          </div>
+          <div class="toggle active" data-setting="feedFollowed" role="switch" aria-checked="true" tabindex="0"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Show recommended pins</div>
+            <div class="setting-desc">Discover new ideas based on your interests</div>
+          </div>
+          <div class="toggle active" data-setting="feedRecommended" role="switch" aria-checked="true" tabindex="0"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Hide saved pins</div>
+            <div class="setting-desc">Don't show pins you've already saved</div>
+          </div>
+          <div class="toggle" data-setting="feedHideSaved" role="switch" aria-checked="false" tabindex="0"></div>
+        </div>
+      </div>
+
+      <!-- Search Panel -->
+      <div class="settings-panel" id="panel-search" role="tabpanel">
+        <h2 class="settings-group-title">Search history</h2>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Save search history</div>
+            <div class="setting-desc">Remember your searches for quick access</div>
+          </div>
+          <div class="toggle active" data-setting="searchHistory" role="switch" aria-checked="true" tabindex="0"></div>
+        </div>
+        <button class="btn-secondary" style="margin-top:16px;">Clear search history</button>
+      </div>
+
+      <!-- Accessibility Panel -->
+      <div class="settings-panel" id="panel-accessibility" role="tabpanel">
+        <h2 class="settings-group-title">Display</h2>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Dark mode</div>
+            <div class="setting-desc">Use dark colors for the interface</div>
+          </div>
+          <div class="toggle" id="darkModeToggle" data-setting="darkMode" role="switch" aria-checked="false" tabindex="0"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Reduce motion</div>
+            <div class="setting-desc">Minimize animations and transitions</div>
+          </div>
+          <div class="toggle" data-setting="reduceMotion" role="switch" aria-checked="false" tabindex="0"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">High contrast</div>
+            <div class="setting-desc">Increase color contrast for readability</div>
+          </div>
+          <div class="toggle" data-setting="highContrast" role="switch" aria-checked="false" tabindex="0"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="assets/js/firebase-config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script type="module">
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { auth } from './assets/js/firebase-config.js';
+
+    onAuthStateChanged(auth, (user) => {
+      if (user && !Auth.isLoggedIn()) {
+        user.getIdToken().then(idToken => {
+          Auth.setSession({
+            id: user.uid,
+            name: user.displayName || user.email.split('@')[0],
+            email: user.email,
+            username: (user.displayName || user.email.split('@')[0]).toLowerCase().replace(/\s+/g, ''),
+            avatar: user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.uid}`,
+            bio: '', followers: 0, following: [], pins: 0, boards: 0,
+            createdAt: new Date().toISOString(),
+            settings: { emailNotifications: true, pushNotifications: true, privateProfile: false },
+            firebaseToken: idToken
+          }, true);
+        });
+      }
+    });
+  </script>
+  <script>
+    App.settingsInit = async function() {
+      const user = Auth.getSession();
+      if (!user) return;
+
+      // Load current settings
+      this.state.settings = user.settings || {
+        emailPins: true,
+        emailFollowers: true,
+        emailBoards: false,
+        emailWeekly: true,
+        emailProduct: false,
+        pushEnabled: true,
+        privateProfile: false,
+        searchVisibility: true,
+        personalization: true,
+        analytics: true,
+        feedFollowed: true,
+        feedRecommended: true,
+        feedHideSaved: false,
+        searchHistory: true,
+        darkMode: false,
+        reduceMotion: false,
+        highContrast: false
+      };
+
+      // Populate profile form
+      document.getElementById('profileName').value = user.name || '';
+      document.getElementById('profileUsername').value = user.username || '';
+      document.getElementById('profileBio').value = user.bio || '';
+      document.getElementById('profileEmail').value = user.email || '';
+
+      // Initialize toggles
+      Object.entries(this.state.settings).forEach(([key, value]) => {
+        const toggle = document.querySelector(`[data-setting="${key}"]`);
+        if (toggle) {
+          toggle.classList.toggle('active', value);
+          toggle.setAttribute('aria-checked', value);
+        }
+      });
+
+      // Dark mode toggle
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      if (darkModeToggle) {
+        darkModeToggle.classList.toggle('active', this.state.settings.darkMode);
+        if (this.state.settings.darkMode) document.documentElement.classList.add('dark');
+      }
+
+      // Bind events
+      this.bindSettingsEvents();
+    };
+
+    App.bindSettingsEvents = function() {
+      // Navigation
+      document.querySelectorAll('.settings-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.querySelectorAll('.settings-link').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+          document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+          document.getElementById(`panel-${link.dataset.panel}`).classList.add('active');
+        });
+      });
+
+      // Toggles
+      document.querySelectorAll('.toggle').forEach(toggle => {
+        toggle.addEventListener('click', () => this.toggleSetting(toggle));
+        toggle.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.toggleSetting(toggle);
+          }
+        });
+      });
+
+      // Profile form
+      document.getElementById('profileForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const btn = form.querySelector('button[type="submit"]');
+        btn.classList.add('loading');
+        btn.disabled = true;
+
+        try {
+          const data = {
+            name: form.name.value.trim(),
+            username: form.username.value.trim(),
+            bio: form.bio.value.trim()
+          };
+          await API.updateProfile(data);
+          Auth.setSession({ ...Auth.getSession(), ...data });
+          this.showToast('Profile updated!');
+        } catch (err) {
+          this.showToast(err.message, 'error');
+        } finally {
+          btn.classList.remove('loading');
+          btn.disabled = false;
+        }
+      });
+
+      // Password form
+      document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        if (form.newPassword.value !== form.confirmPassword.value) {
+          this.showToast('Passwords do not match', 'error');
+          return;
+        }
+        if (form.newPassword.value.length < 6) {
+          this.showToast('Password must be at least 6 characters', 'error');
+          return;
+        }
+        const btn = form.querySelector('button[type="submit"]');
+        btn.classList.add('loading');
+        btn.disabled = true;
+
+        try {
+          // Simulate password change
+          await API.delay(800);
+          this.showToast('Password updated!');
+          form.reset();
+        } catch (err) {
+          this.showToast('Failed to update', 'error');
+        } finally {
+          btn.classList.remove('loading');
+          btn.disabled = false;
+        }
+      });
+    };
+
+    App.toggleSetting = function(toggle) {
+      const key = toggle.dataset.setting;
+      const active = !toggle.classList.contains('active');
+      toggle.classList.toggle('active', active);
+      toggle.setAttribute('aria-checked', active);
+      this.state.settings[key] = active;
+
+      // Special handling for dark mode
+      if (key === 'darkMode') {
+        document.documentElement.classList.toggle('dark', active);
+      }
+
+      // Save to API
+      API.updateSettings({ [key]: active });
+    };
+  </script>
+</body>
+</html>
