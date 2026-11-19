@@ -1,0 +1,53 @@
+# Netlify Configuration for Pinterest Clone Frontend
+# Deploy: netlify deploy --prod --dir=.
+
+[build]
+  command = "echo 'No build required - static site'"
+  publish = "."
+
+# Redirects for SPA-like behavior
+[[redirects]]
+  from = "/create"
+  to = "/create.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin"
+  to = "/admin.html"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/login.html"
+  status = 200
+
+# Handle trailing slashes
+[[redirects]]
+  from = "/*/"
+  to = "/:splat"
+  status = 301
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Cache static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Environment variables (set in Netlify Dashboard → Site Settings → Environment Variables):
+# IMAGEKIT_PUBLIC_KEY = your_public_key
+# IMAGEKIT_URL_ENDPOINT = your_url_endpoint
+# IMAGEKIT_AUTH_ENDPOINT = https://your-backend.netlify.app/.netlify/functions/imagekit-auth

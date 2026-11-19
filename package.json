@@ -1,0 +1,28 @@
+{
+  "name": "pinterest-clone-frontend",
+  "version": "1.0.0",
+  "description": "Pinterest Clone Frontend with ImageKit Integration",
+  "type": "module",
+  "scripts": {
+    "dev": "npx serve . -p 3000",
+    "build": "echo 'No build step required - static files'",
+    "preview": "npx serve . -p 3000",
+    "deploy:vercel": "vercel --prod",
+    "deploy:netlify": "netlify deploy --prod --dir=."
+  },
+  "keywords": [
+    "pinterest",
+    "clone",
+    "imagekit",
+    "gallery",
+    "pins"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

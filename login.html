@@ -1,198 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Log in • Pin Panda</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Pinterest Clone</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px;">
-    <div style="width:100%;max-width:380px;">
-      <a href="index.html" class="logo" style="display:inline-flex;align-items:center;gap:10px;margin-bottom:32px;" aria-label="Pin Panda">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M12 0c-6.627 0-12 5.372-12 12 0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.401.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
-        Pin Panda
-      </a>
-      <div class="card" style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);">
-        <h1 style="font-size:24px;font-weight:700;margin-bottom:8px;">Log in</h1>
-        <p class="subtitle" style="color:var(--muted);font-size:15px;margin-bottom:24px;">Continue to discover and save ideas</p>
-        <form id="loginForm" novalidate>
-          <div class="form-group">
-            <label class="form-label" for="email">Email</label>
-            <input type="email" class="form-input" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
-            <div class="form-error" id="emailError">Enter a valid email</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="password">Password</label>
-            <input type="password" class="form-input" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required>
-            <div class="form-error" id="passwordError">Password is required</div>
-          </div>
-          <div class="options flex items-center justify-between" style="margin:8px 0 24px;font-size:14px;">
-            <label class="checkbox-wrap">
-              <input type="checkbox" name="remember" value="1"> Remember me
-            </label>
-            <a href="#" class="forgot" style="color:var(--fg);text-decoration:none;font-weight:500;">Forgot password?</a>
-          </div>
-          <button type="submit" class="btn-primary w-full" id="submitBtn" style="height:48px;">Log in</button>
-        </form>
-        <div class="divider" style="display:flex;align-items:center;gap:16px;margin:24px 0;color:var(--muted);font-size:13px;">
-          <span style="flex:1;height:1px;background:var(--border);"></span>
-          or continue with
-          <span style="flex:1;height:1px;background:var(--border);"></span>
+    <div class="auth-page">
+        <div class="auth-container">
+            <div class="auth-header">
+                <a href="index.html" class="logo" aria-label="Pinterest Clone Home">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="auth-card">
+                <h1 class="auth-title">Welcome back</h1>
+                <p class="auth-subtitle">Enter your username to continue</p>
+
+                <form class="auth-form" id="loginForm" novalidate>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <input type="text" id="username" name="username" placeholder="Enter username" required autocomplete="username" aria-describedby="usernameError">
+                        </div>
+                        <p class="error-message" id="usernameError" hidden></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <input type="password" id="password" name="password" placeholder="Enter password" required autocomplete="current-password" aria-describedby="passwordError">
+                            <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">
+                                <svg class="eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="eye-closed" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" hidden>
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="error-message" id="passwordError" hidden></p>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMe" name="rememberMe">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full" id="loginBtn">
+                        <span class="btn-text">Log in</span>
+                        <span class="btn-loading" hidden>
+                            <svg class="spinner" width="20" height="20" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4 31.4" stroke-linecap="round"></circle>
+                            </svg>
+                            Signing in...
+                        </span>
+                    </button>
+                </form>
+
+                <div class="auth-divider">
+                    <span>or continue as</span>
+                </div>
+
+                <button type="button" class="btn btn-outline btn-full" id="guestBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Continue as Guest
+                </button>
+
+                <p class="auth-footer">
+                    Don't have an account? <a href="#" id="signupLink">Sign up</a>
+                </p>
+
+                <!-- Admin hint -->
+                <div class="admin-hint" id="adminHint">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                        <path d="M8 21h8"></path>
+                        <path d="M12 17v4"></path>
+                    </svg>
+                    <span>Admin login: <code>Paru@1523</code> (no password needed)</span>
+                </div>
+            </div>
         </div>
-        <button type="button" class="btn-secondary w-full" id="googleBtn" style="height:48px;gap:10px;">
-          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-          Google
-        </button>
-        <button type="button" class="btn-secondary w-full" id="appleBtn" style="height:48px;margin-top:12px;gap:10px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-2.6 1.1-5.8 1.7-9 1.7-8.5 0-13.7-6.9-11.2-13.9 2.2-6.3 8.4-10.8 15.2-10.8 3.3 0 5.4 1 8.4 1.8C18.6 8.6 17 14.2 18.7 19.5zM16.5 6.7c-2.4-.4-4.4 1-6 1.7-3.8 1.8-5.9 6.4-4.4 10.7 1.6 4.3 6.4 6 10.4 4.5 2.5-.9 4-3.6 3.6-6.3-.3-2.5-2.2-4.3-4.7-4.7-2.3-.4-4.4 1.2-5.6 3.2-.3.5-.5 1-.5 1.6 0 .6.1 1.3.5 1.9 1.6 3.6 5.8 5.1 9.6 3.7 3.2-1.1 5.6-5.1 5.3-8.9-.4-4.9-4.2-8.6-8.8-9zm-2.4 7.8c-.6 2.1-2.5 3.6-5.4 3.3-2.2-.2-4-1.7-4.7-3.8-.5-1.7-.1-3.7 1.3-4.9 2.5-2.2 6-.9 7.8 1.7.4.6.3 1.5-.2 1.7z"/></svg>
-          Apple
-        </button>
-        <p style="text-align:center;margin-top:24px;font-size:14px;color:var(--muted);">Don't have an account? <a href="signup.html" style="color:var(--fg);font-weight:600;">Sign up</a></p>
-        <p class="terms" style="text-align:center;margin-top:16px;font-size:12px;color:var(--muted);line-height:1.5;">By continuing, you agree to Pin Panda's <a href="#" style="color:var(--fg);">Terms of Service</a> and acknowledge you've read our <a href="#" style="color:var(--fg);">Privacy Policy</a>.</p>
-      </div>
     </div>
-  </div>
 
-  <script type="module" src="assets/js/firebase-config.js"></script>
-  <script src="assets/js/api.js"></script>
-  <script src="assets/js/auth.js"></script>
-  <script src="assets/js/app.js"></script>
-  <script type="module">
-    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-    import { auth } from './assets/js/firebase-config.js';
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
-    // Redirect if already logged in (check both Firebase and local session)
-    const checkAuth = async () => {
-      // Check local session first
-      if (Auth.isLoggedIn()) {
-        window.location.replace('index.html');
-        return;
-      }
-      // Check Firebase auth state
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          // User is signed in with Firebase, create local session
-          handleFirebaseUser(user);
-        }
-      });
-    };
-
-    async function handleFirebaseUser(firebaseUser) {
-      try {
-        const idToken = await firebaseUser.getIdToken();
-        const userData = {
-          id: firebaseUser.uid,
-          name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
-          email: firebaseUser.email,
-          username: (firebaseUser.displayName || firebaseUser.email.split('@')[0]).toLowerCase().replace(/\s+/g, ''),
-          avatar: firebaseUser.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${firebaseUser.uid}`,
-          bio: '',
-          followers: 0,
-          following: [],
-          pins: 0,
-          boards: 0,
-          createdAt: new Date().toISOString(),
-          settings: { emailNotifications: true, pushNotifications: true, privateProfile: false },
-          firebaseToken: idToken
-        };
-        Auth.setSession(userData, true);
-        App.showToast('Welcome back!');
-        window.location.href = 'index.html';
-      } catch (err) {
-        console.error('Firebase user handling error:', err);
-      }
-    }
-
-    checkAuth();
-
-    // Form elements
-    const form = document.getElementById('loginForm');
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-    const submitBtn = document.getElementById('submitBtn');
-    const emailError = document.getElementById('emailError');
-    const passwordError = document.getElementById('passwordError');
-
-    function validateEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
-    function showError(input, errorEl) { input.classList.add('error'); errorEl.classList.add('show'); }
-    function clearError(input, errorEl) { input.classList.remove('error'); errorEl.classList.remove('show'); }
-
-    email.addEventListener('input', () => clearError(email, emailError));
-    password.addEventListener('input', () => clearError(password, passwordError));
-
-    // Email/Password login
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      let valid = true;
-      if (!validateEmail(email.value)) { showError(email, emailError); valid = false; }
-      if (!password.value) { showError(password, passwordError); valid = false; }
-      if (!valid) return;
-
-      submitBtn.classList.add('loading');
-      submitBtn.disabled = true;
-
-      try {
-        // Use Firebase email/password sign-in
-        const { signInWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
-        const result = await signInWithEmailAndPassword(firebaseAuth, email.value.trim(), password.value);
-        await handleFirebaseUser(result.user);
-      } catch (err) {
-        App.showToast(getFirebaseErrorMessage(err.code), 'error');
-      } finally {
-        submitBtn.classList.remove('loading');
-        submitBtn.disabled = false;
-      }
-    });
-
-    // Google OAuth
-    document.getElementById('googleBtn').addEventListener('click', async () => {
-      const btn = document.getElementById('googleBtn');
-      btn.classList.add('loading');
-      btn.disabled = true;
-
-      try {
-        const { signInWithPopup, GoogleAuthProvider, getAuth } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
-        const auth = getAuth();
-        const provider = new GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: 'select_account' });
-        const result = await signInWithPopup(auth, provider);
-        await handleFirebaseUser(result.user);
-      } catch (err) {
-        App.showToast(getFirebaseErrorMessage(err.code), 'error');
-      } finally {
-        btn.classList.remove('loading');
-        btn.disabled = false;
-      }
-    });
-
-    // Demo buttons (Apple, Facebook - not implemented with Firebase)
-    document.querySelectorAll('#appleBtn, #facebookBtn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        App.showToast(`${btn.textContent.trim()} OAuth not configured (add in Firebase Console)`, 'default');
-      });
-    });
-
-    // Firebase error message mapping
-    function getFirebaseErrorMessage(code) {
-      const messages = {
-        'auth/invalid-email': 'Invalid email address',
-        'auth/user-disabled': 'Account disabled',
-        'auth/user-not-found': 'No account found with this email',
-        'auth/wrong-password': 'Incorrect password',
-        'auth/email-already-in-use': 'Email already registered',
-        'auth/weak-password': 'Password too weak (min 6 chars)',
-        'auth/popup-closed-by-user': 'Sign-in popup was closed',
-        'auth/cancelled-popup-request': 'Sign-in cancelled',
-        'auth/network-request-failed': 'Network error. Check connection.',
-        'auth/too-many-requests': 'Too many attempts. Try later.',
-        'auth/invalid-credential': 'Invalid credentials'
-      };
-      return messages[code] || 'Authentication failed. Please try again.';
-    }
-  </script>
+    <script src="assets/js/auth.js"></script>
 </body>
 </html>

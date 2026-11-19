@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Pinterest Clone</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <a href="index.html" class="logo">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.08 3.16 9.42 7.5 10.9.1.12.13.28.13.43 0 .36-.3.65-.66.65-.17 0-.34-.04-.49-.11C4.44 22.4 2.78 21.34 2 19.5 1.84 20.69 2.34 21.7 3.26 22.5c.22.19.48.23.71.11.38-.19.66-.59.67-1.01.17-1.13.75-2.1 1.64-2.73.69-.49 1.52-.8 2.4-.8.8 0 1.58.26 2.18.72.18.14.37.24.58.24.4 0 .75-.2.9-.52.13-.27.17-.58.1-.87-.14-.55-.53-1.01-1.04-1.37-.05-.04-.09-.08-.14-.12-.22-.19-.38-.42-.43-.7-.02-.13-.02-.27 0-.4.02-.1.06-.2.1-.29.15-.31.42-.64.43-.54 1.04-.99 1.83-1.31.22-.09.45-.15.68-.15.6 0 1.13.18 1.58.5.36.25.59.62.59 1.05 0 .49-.3.88-.73 1.07-.16.07-.33.12-.5.15v.8c0 .55.4.99.9.99.37 0 .7-.2.85-.5.06-.11.1-.23.13-.36.07-.26.03-.53-.1-.74C19.3 19.9 20.5 17.4 20.5 14.5c0-1.1-.34-2.13-.9-2.95.4-.2.7-.5 1-.9.1-.13.17-.28.2-.43.15-.72.23-1.48.23-2.26 0-5.06-3.07-9.26-7.5-9.89C14.98.12 13.5 0 12 0z"/>
+                </svg>
+            </a>
+        </div>
+
+        <div class="header-center">
+            <form class="search-form" id="searchForm">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" placeholder="Search ideas..." id="searchInput" autocomplete="off">
+            </form>
+        </div>
+
+        <div class="header-right">
+            <a href="index.html" class="btn btn-secondary" style="height: 40px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Home</span>
+            </a>
+            <a href="create.html" class="btn btn-create" id="createBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Create</span>
+            </a>
+            <div class="user-menu" id="userMenu" style="display: none;">
+                <button class="user-avatar" id="userAvatar">
+                    <span id="userInitial">U</span>
+                </button>
+                <div class="user-dropdown" id="userDropdown">
+                    <div class="user-info">
+                        <span id="userName">User</span>
+                        <span id="userRole" class="role-badge">User</span>
+                    </div>
+                    <a href="admin.html" class="dropdown-item" id="adminLink" style="display: none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                            <path d="M8 21h8"></path>
+                            <path d="M12 17v4"></path>
+                        </svg>
+                        Admin Panel
+                    </a>
+                    <hr class="dropdown-divider">
+                    <button class="dropdown-item" id="logoutBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Admin Header -->
+            <div class="admin-header">
+                <h1>Admin Panel</h1>
+                <span class="role-badge admin" style="font-size: 13px; padding: 6px 12px;">Super Admin Access</span>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="admin-stats" id="adminStats">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Admin Users Management -->
+            <div class="admin-section">
+                <div class="admin-section-header">
+                    <h2>Admin Users Management</h2>
+                    <button class="btn btn-admin" id="addAdminBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Admin
+                    </button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table" id="adminUsersTable">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminUsersBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- All Pins Management -->
+            <div class="admin-section">
+                <div class="admin-section-header">
+                    <h2>All Pins Management</h2>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="text" id="pinSearchInput" class="form-input" placeholder="Search pins..." style="width: 250px; padding: 8px 12px; font-size: 13px;">
+                        <select id="pinFilterUser" class="form-select" style="width: 180px; padding: 8px 12px; font-size: 13px;">
+                            <option value="">All Users</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table" id="allPinsTable">
+                        <thead>
+                            <tr>
+                                <th>Preview</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allPinsBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="load-more-container" style="padding-top: 16px;">
+                    <button class="btn btn-load-more" id="loadMorePinsBtn">Load More Pins</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Pinterest Clone. Built with ImageKit.</p>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Add Admin Modal -->
+    <div class="modal-overlay" id="addAdminModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Add New Admin</h2>
+                <button class="modal-close" aria-label="Close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <form id="addAdminForm" class="modal-body">
+                <div class="form-group">
+                    <label for="newAdminUsername" class="form-label">Username</label>
+                    <input type="text" id="newAdminUsername" name="username" class="form-input" placeholder="Enter username for new admin" autocomplete="username" required autofocus>
+                </div>
+                <p style="font-size: 13px; color: var(--color-text-muted);">The new admin will be able to manage all pins and add/remove other admins.</p>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                <button type="submit" form="addAdminForm" class="btn btn-admin">Add Admin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="confirmTitle">Confirm Action</h2>
+                <button class="modal-close" aria-label="Close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="confirmMessage">
+                <!-- Populated dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-close" id="confirmCancel">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmAction">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/imagekit-config.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>
