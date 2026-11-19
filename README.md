@@ -121,23 +121,7 @@ pinterest-clone/
 └── GITHUB_DEPLOY_GUIDE.md    # Detailed deployment guide
 ```
 
-## Admin Usage
 
-### Login as Admin
-1. Click **Login** in header
-2. Enter username: `Paru@1523`
-3. You'll see **Admin Panel** in user dropdown
-
-### Admin Panel Features
-- **Stats Dashboard**: Total pins, unique authors, admin count, your pins
-- **Admin Users Management**: Add/remove admin users
-- **All Pins Management**: View, search, filter, and delete ANY pin
-
-### Adding New Admins
-1. Go to Admin Panel
-2. Click "Add Admin"
-3. Enter new username
-4. They can now login and manage pins
 
 ## ImageKit Setup
 
