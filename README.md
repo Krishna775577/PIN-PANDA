@@ -11,7 +11,6 @@ A full-featured Pinterest clone with image uploads via ImageKit, admin authentic
 - **Search & filter** - Real-time pin search
 
 ### 🔐 Admin System
-- **Username-only login** - Default admin: `Paru@1523`
 - **Admin management** - Add/remove admin users from settings
 - **Pin permissions**:
   - **Admins**: Can delete ANY pin, manage all users
