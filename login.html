@@ -8,6 +8,80 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Admin Login Toggle Styles */
+        .auth-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: var(--color-bg-secondary);
+            padding: 4px;
+            border-radius: var(--border-radius-sm);
+        }
+
+        .auth-tab {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border-radius: var(--border-radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            background: transparent;
+            transition: var(--transition);
+        }
+
+        .auth-tab:hover {
+            color: var(--color-text);
+            background: var(--color-bg);
+        }
+
+        .auth-tab.active {
+            background: var(--color-bg);
+            color: var(--color-primary);
+            box-shadow: 0 2px 8px var(--color-shadow);
+        }
+
+        .auth-tab svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .auth-tab.admin-tab.active {
+            color: var(--color-admin);
+        }
+
+        .form-group.hidden {
+            display: none;
+        }
+
+        .admin-hint {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--color-admin-bg);
+            border-radius: var(--border-radius-sm);
+            font-size: 13px;
+            color: var(--color-admin);
+            margin-top: 16px;
+        }
+
+        .admin-hint svg {
+            flex-shrink: 0;
+        }
+
+        .admin-hint code {
+            background: rgba(255, 107, 0, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
     <div class="auth-page">
@@ -24,7 +98,27 @@
                 <h1 class="auth-title">Welcome back</h1>
                 <p class="auth-subtitle">Enter your username to continue</p>
 
-                <form class="auth-form" id="loginForm" novalidate>
+                <!-- Auth Tabs -->
+                <div class="auth-tabs" role="tablist" aria-label="Login type">
+                    <button type="button" class="auth-tab active" id="userTab" role="tab" aria-selected="true" aria-controls="userLoginPanel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span>User Login</span>
+                    </button>
+                    <button type="button" class="auth-tab" id="adminTab" role="tab" aria-selected="false" aria-controls="adminLoginPanel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                            <path d="M8 21h8"></path>
+                            <path d="M12 17v4"></path>
+                        </svg>
+                        <span>Admin Login</span>
+                    </button>
+                </div>
+
+                <!-- User Login Form -->
+                <form class="auth-form" id="loginForm" novalidate role="tabpanel" id="userLoginPanel" aria-labelledby="userTab">
                     <div class="form-group">
                         <label for="username">Username</label>
                         <div class="input-wrapper">
@@ -37,7 +131,7 @@
                         <p class="error-message" id="usernameError" hidden></p>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="passwordGroup">
                         <label for="password">Password</label>
                         <div class="input-wrapper">
                             <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -78,6 +172,48 @@
                     </button>
                 </form>
 
+                <!-- Admin Login Form -->
+                <form class="auth-form hidden" id="adminLoginForm" novalidate role="tabpanel" id="adminLoginPanel" aria-labelledby="adminTab" hidden>
+                    <div class="form-group">
+                        <label for="adminUsername">Admin Username</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                                <path d="M8 21h8"></path>
+                                <path d="M12 17v4"></path>
+                            </svg>
+                            <input type="text" id="adminUsername" name="username" placeholder="Enter admin username (e.g., Paru@1523)" required autocomplete="username" aria-describedby="adminUsernameError">
+                        </div>
+                        <p class="error-message" id="adminUsernameError" hidden></p>
+                    </div>
+
+                    <div class="admin-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <span>No password required. Default admin: <code>Paru@1523</code></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-admin btn-full" id="adminLoginBtn">
+                        <span class="btn-text">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                                <path d="M8 21h8"></path>
+                                <path d="M12 17v4"></path>
+                            </svg>
+                            Admin Login
+                        </span>
+                        <span class="btn-loading" hidden>
+                            <svg class="spinner" width="20" height="20" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4 31.4" stroke-linecap="round"></circle>
+                            </svg>
+                            Signing in...
+                        </span>
+                    </button>
+                </form>
+
                 <div class="auth-divider">
                     <span>or continue as</span>
                 </div>
@@ -93,16 +229,6 @@
                 <p class="auth-footer">
                     Don't have an account? <a href="#" id="signupLink">Sign up</a>
                 </p>
-
-                <!-- Admin hint -->
-                <div class="admin-hint" id="adminHint">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="3" width="20" height="14" rx="2"></rect>
-                        <path d="M8 21h8"></path>
-                        <path d="M12 17v4"></path>
-                    </svg>
-                    <span>Admin login: <code>Paru@1523</code> (no password needed)</span>
-                </div>
             </div>
         </div>
     </div>
@@ -111,5 +237,99 @@
     <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
     <script src="assets/js/auth.js"></script>
+    <script>
+        // Admin Login Toggle Logic
+        (function() {
+            const userTab = document.getElementById('userTab');
+            const adminTab = document.getElementById('adminTab');
+            const userForm = document.getElementById('loginForm');
+            const adminForm = document.getElementById('adminLoginForm');
+            const passwordGroup = document.getElementById('passwordGroup');
+
+            function switchToUserLogin() {
+                userTab.classList.add('active');
+                userTab.setAttribute('aria-selected', 'true');
+                adminTab.classList.remove('active');
+                adminTab.setAttribute('aria-selected', 'false');
+
+                userForm.classList.remove('hidden');
+                userForm.removeAttribute('hidden');
+                adminForm.classList.add('hidden');
+                adminForm.setAttribute('hidden', '');
+
+                // Password is required for user login
+                const passwordInput = document.getElementById('password');
+                if (passwordInput) passwordInput.required = true;
+                passwordGroup.classList.remove('hidden');
+            }
+
+            function switchToAdminLogin() {
+                adminTab.classList.add('active');
+                adminTab.setAttribute('aria-selected', 'true');
+                userTab.classList.remove('active');
+                userTab.setAttribute('aria-selected', 'false');
+
+                adminForm.classList.remove('hidden');
+                adminForm.removeAttribute('hidden');
+                userForm.classList.add('hidden');
+                userForm.setAttribute('hidden', '');
+
+                // Password not required for admin login
+                const passwordInput = document.getElementById('password');
+                if (passwordInput) passwordInput.required = false;
+                passwordGroup.classList.add('hidden');
+            }
+
+            userTab.addEventListener('click', switchToUserLogin);
+            adminTab.addEventListener('click', switchToAdminLogin);
+
+            // Handle admin login form submission
+            const adminLoginForm = document.getElementById('adminLoginForm');
+            if (adminLoginForm) {
+                adminLoginForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+
+                    const username = document.getElementById('adminUsername').value.trim();
+                    const loginBtn = document.getElementById('adminLoginBtn');
+                    const btnText = loginBtn.querySelector('.btn-text');
+                    const btnLoading = loginBtn.querySelector('.btn-loading');
+
+                    if (!username) {
+                        if (window.Auth && window.Auth.showToast) {
+                            window.Auth.showToast('Please enter admin username', 'error');
+                        }
+                        return;
+                    }
+
+                    // Show loading state
+                    loginBtn.disabled = true;
+                    btnText.hidden = true;
+                    btnLoading.hidden = false;
+
+                    // Use Auth.login (no password needed for admin)
+                    if (window.Auth && window.Auth.login) {
+                        const result = window.Auth.login(username);
+
+                        // Reset button state
+                        loginBtn.disabled = false;
+                        btnText.hidden = false;
+                        btnLoading.hidden = true;
+
+                        if (result.success) {
+                            if (window.Auth && window.Auth.showToast) {
+                                window.Auth.showToast(`Welcome, Admin ${username}!`, 'success');
+                            }
+                            // Redirect to admin panel
+                            window.location.href = 'admin.html';
+                        } else {
+                            if (window.Auth && window.Auth.showToast) {
+                                window.Auth.showToast(result.error || 'Invalid admin username', 'error');
+                            }
+                        }
+                    }
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
