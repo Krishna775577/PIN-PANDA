@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "imagekit-auth.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "imagekit-auth.js"
+    },
+    {
+      "src": "/health",
+      "dest": "imagekit-auth.js"
+    }
+  ],
+  "env": {
+    "IMAGEKIT_PUBLIC_KEY": "@imagekit_public_key",
+    "IMAGEKIT_PRIVATE_KEY": "@imagekit_private_key",
+    "IMAGEKIT_URL_ENDPOINT": "@imagekit_url_endpoint"
+  },
+  "functions": {
+    "imagekit-auth.js": {
+      "maxDuration": 30
+    }
+  }
+}

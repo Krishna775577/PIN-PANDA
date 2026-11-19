@@ -1,0 +1,29 @@
+{
+  "name": "pinterest-clone-imagekit-auth",
+  "version": "1.0.0",
+  "description": "ImageKit authentication endpoint for Pinterest Clone",
+  "main": "imagekit-auth.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node imagekit-auth.js",
+    "dev": "node imagekit-auth.js",
+    "vercel-build": "echo 'No build step required'"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "imagekit": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "imagekit",
+    "auth",
+    "upload",
+    "pinterest-clone"
+  ],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,29 @@
+# Netlify Configuration for ImageKit Auth Backend
+# Deploy: netlify deploy --prod --dir=server
+
+[build]
+  command = "npm install"
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["**/*.js", "**/*.json"]
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/imagekit-auth/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/health"
+  to = "/.netlify/functions/imagekit-auth/health"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Environment variables (set in Netlify Dashboard → Site Settings → Environment Variables):
+# IMAGEKIT_PUBLIC_KEY = your_public_key
+# IMAGEKIT_PRIVATE_KEY = your_private_key
+# IMAGEKIT_URL_ENDPOINT = your_url_endpoint
